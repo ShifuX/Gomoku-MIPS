@@ -13,7 +13,6 @@ main:
 	lb $t2, blank_piece
 	jal fill_board
 	jal call_display
-	jal call_display
 	
 	li $v0, 10
 	syscall
@@ -66,6 +65,10 @@ exit_board:
 	
 	li $v0, 1
 	la $a0, ($t6)
+	syscall
+	
+	li $v0, 4
+	la $a0, nl
 	syscall
 	
 	addi $t0, $zero, 0	# Resetting registers
