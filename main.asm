@@ -1,5 +1,6 @@
 .data
 board: .space 361
+buffer: .space 1
 blank_piece: .ascii "."
 star_piece: .ascii "*"
 circle_piece: .ascii "O"
@@ -13,6 +14,8 @@ board_num: .word 1
 row: .word 0
 col: .word 0
 dist: .word 0
+mssg: .asciiz "EQUAL"
+
 .text
 main:
 	addi $t0, $zero, 0
@@ -32,9 +35,17 @@ user_input:	# Gets the placement from the user and calls necessary functions to 
 	la $a0, test_col
 	syscall
 
-	li $v0, 5
+	li $v0, 8       # take in input
+    la $a0, buffer  # load byte space into address
+    li $a1, 2     # allot the byte space for string
+    move $t8, $a0   # save string to t9
+    syscall
+
+	jal letter_val
+	
+	li $v0, 4
+	la $a0, nl
 	syscall
-	sw $v0, col
 
 	li $v0, 4
 	la $a0, test_row
@@ -215,5 +226,29 @@ place_piece:
 	addi $t0, $zero, 0	# Reset registers
 	addi $t1, $zero, 0
 	addi $t2, $zero, 0
+
+	jr $ra
+
+letter_val:	# Uses the letter from user input and gives it a corresponding numerical val
+	la $t0, board_letters
+	addu $t0, $t0, 3
+	addi $t3, $zero, 0
+	
+	find_match:	# Loops through the character array and looks for a match with user input
+		lbu $t1, ($t0)
+		lbu $t2, ($t8)
+		beq $t1, $t2, val
+		addu $t0, $t0, 2
+		addi $t3, $t3, 1
+
+		j find_match
+
+val:	# Stores the val of the col
+	sw $t3, col
+	addi $t0, $zero, 0
+	addi $t1, $zero, 0
+	addi $t2, $zero, 0
+	addi $t3, $zero, 0
+	addi $t8, $zero, 0
 
 	jr $ra
