@@ -13,6 +13,8 @@ sub_counter: .word 18
 board_num: .word 1
 row: .word 0
 col: .word 0
+AI_row: .word 0
+AI_col: .word 0
 dist: .word 0
 mssg: .asciiz "EQUAL"
 
@@ -55,9 +57,15 @@ user_input:	# Gets the placement from the user and calls necessary functions to 
 	syscall
 	sw $v0, row
 
-	jal calculate_place
+	lw $a0, row
+	lw $a1, col
+
+	jal calculate_place #$a0 is row $a1 is col
 	jal place_piece
 	jal call_display
+	
+	jal generate_col_and_row
+	jal place_AI_piece
 	
 	move $ra, $t9
 	addi $t9, $zero, 0
@@ -203,12 +211,12 @@ extra_space:
 	j extra_space_return
 
 # ((row - 1) * 19) + col
-calculate_place:
-	lw $t0, row		# $t0 has row value
-	lw $t2, col		# $t2 has value of col
-	sub $t1, $t0, 1		#(row - 1)
+calculate_place: # $a0 is row $a1 is col
+	#lw $t0, row		# $t0 has row value
+	#lw $t2, col		# $t2 has value of col
+	sub $t1, $a0, 1		#(row - 1)
 	mul $t1, $t1, 19	# $t1 * 19
-	add $t1, $t1, $t2	# ($t1 + col)
+	add $t1, $t1, $a1	# ($t1 + col)
 
 	sw $t1, dist	# Store result into dist
 	
@@ -252,3 +260,26 @@ val:	# Stores the val of the col
 	addi $t8, $zero, 0
 
 	jr $ra
+
+
+############# AI Code
+generate_col_and_row:
+	li $v0, 42 #Generate random int
+	li $a1, 19 #Set upper bound
+	syscall
+	sw $a0, AI_col #Store random num
+	
+	li $v0, 42 #Generate random int
+	li $a1, 19 #Set upper bound
+	syscall
+	sw $a0, AI_row #Store random num
+	
+place_AI_piece:
+	lw $a0, AI_row
+	lw $a1, AI_col
+
+	jal calculate_place
+	jal place_piece
+	jal call_display
+
+#############
