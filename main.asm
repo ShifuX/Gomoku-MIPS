@@ -16,7 +16,6 @@ col: .word 0
 AI_row: .word 0
 AI_col: .word 0
 dist: .word 0
-mssg: .asciiz "EQUAL"
 
 .text
 main:
@@ -26,7 +25,7 @@ main:
 	jal fill_board
 	jal call_display
 	
-	jal user_input	# Calls funciton to get user input (currently not implemented using the letters, use the number with A starting at 0)
+	jal user_input	# Calls funciton to get user input
 	
 	li $v0, 10
 	syscall
@@ -62,10 +61,9 @@ user_input:	# Gets the placement from the user and calls necessary functions to 
 
 	jal calculate_place #$a0 is row $a1 is col
 	jal place_piece
-	jal call_display
-	
 	jal generate_col_and_row
 	jal place_AI_piece
+	jal call_display
 	
 	move $ra, $t9
 	addi $t9, $zero, 0
@@ -275,11 +273,14 @@ generate_col_and_row:
 	sw $a0, AI_row #Store random num
 	
 place_AI_piece:
+	move $t6, $ra
 	lw $a0, AI_row
 	lw $a1, AI_col
 
 	jal calculate_place
 	jal place_piece
-	jal call_display
+	move $ra, $t6
+	addi $t6, $zero, 0
+	jr $ra
 
 #############
