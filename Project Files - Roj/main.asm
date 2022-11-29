@@ -32,6 +32,7 @@ userColor: .space 2
 .globl dist
 .globl star_piece
 .globl circle_piece
+.globl blank_piece
 .globl AI_col
 .globl AI_row
 .globl col
