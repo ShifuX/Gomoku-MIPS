@@ -54,7 +54,6 @@ main:
 	jal color_input # Calls function to get color of user
 	jal user_input	# Calls funciton to get user input
 	jal user_input	# Calls funciton to get user input
-	
+
 	li $v0, 10
 	syscall
-	

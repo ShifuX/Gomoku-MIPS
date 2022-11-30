@@ -2,10 +2,9 @@
 .globl user_input
 
 user_input:	# Gets the placement from the user and calls necessary functions to place the piece
-	
-	beq $s1, 'W', userSecond # check color of user - saved in s1 from color input FIXME: not working as intended
-	
 	move $t9, $ra
+	beq $s1, 'W', userSecond # check color of user - saved in s1 from color input FIXME: Fixed mate, ;)
+	
 	li $v0, 4
 	la $a0, test_col
 	syscall
@@ -41,7 +40,8 @@ user_input:	# Gets the placement from the user and calls necessary functions to 
 	jal generate_col_and_row
 	lb $t1, circle_piece # AI is white
 	jal place_AI_piece
-	j Endif
+	move $ra, $t9
+	jr $ra
 	
 userSecond: # AI goes first, user goes second if user is white
 
@@ -50,7 +50,6 @@ userSecond: # AI goes first, user goes second if user is white
 	jal place_AI_piece
 	
 	
-	move $t9, $ra
 	li $v0, 4
 	la $a0, test_col
 	syscall
@@ -81,11 +80,10 @@ userSecond: # AI goes first, user goes second if user is white
 	jal calculate_place #$a0 is row $a1 is col
 	lb $t1, circle_piece # user is white
 	jal place_piece
-	
+	j Endif
 	
 Endif:
 	jal call_display
 	move $ra, $t9
 	addi $t9, $zero, 0
-
 	jr $ra
