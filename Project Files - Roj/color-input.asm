@@ -13,13 +13,22 @@ color_input: # gets color from user
 	la $a1, 2
 	syscall
 	
-	lb $s1, ($a0) # check which color user inputs
+	lb $s1, ($a0) # store color in $s1 to check if user/AI moves first
 	
-	la $a0, nl # ask user for color
+	beq $s1, 'B', valid  # check if user inputs a valid color
+	bne $s1, 'W', invalidColor
+	
+valid:
+	la $a0, nl # new line
+	li $v0, 4
+	syscall
+
+	jr $ra
+	
+invalidColor: # loop back to color input if input was invalid
+
+	la $a0, invalidColorMsg
 	li $v0, 4
 	syscall
 	
-	#lb $s1, ($a0) # check which color user inputs
-	#sb $s1, userColor # store user color - check for black/white when deciding user/AI color
-			  # color decides if user or AI goes first (black goes first)
-	jr $ra
+	j color_input
