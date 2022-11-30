@@ -1,10 +1,14 @@
 .text
 .globl user_input
+.globl returnOne
+.globl returnTwo
 
 user_input:	# Gets the placement from the user and calls necessary functions to place the piece
 	move $t9, $ra
-	beq $s1, 'W', userSecond # check color of user - saved in s1 from color input FIXME: Fixed mate, ;)
+	beq $s1, 'W', userSecond # check color of user - saved in s1 from color input
 	
+returnOne: # Jump label if user input is invalid
+
 	li $v0, 4
 	la $a0, test_col
 	syscall
@@ -32,24 +36,24 @@ user_input:	# Gets the placement from the user and calls necessary functions to 
 	lw $a0, row
 	lw $a1, col
 	
-
 	jal calculate_place #$a0 is row $a1 is col
-	lb $t1, star_piece # user is black
+	lb $t4, star_piece # user is black
 	jal place_piece
 	
 	jal generate_col_and_row
-	lb $t1, circle_piece # AI is white
+	lb $t4, circle_piece # AI is white
 	jal place_AI_piece
-	move $ra, $t9
-	jr $ra
+	#move $ra, $t9
+	j Endif
 	
 userSecond: # AI goes first, user goes second if user is white
 
 	jal generate_col_and_row
-	lb $t1, star_piece # AI is black
+	lb $t4, star_piece # AI is black
 	jal place_AI_piece
 	
-	
+returnTwo: # Jump label if user input is invalid
+		
 	li $v0, 4
 	la $a0, test_col
 	syscall
@@ -78,7 +82,7 @@ userSecond: # AI goes first, user goes second if user is white
 	lw $a1, col
 	
 	jal calculate_place #$a0 is row $a1 is col
-	lb $t1, circle_piece # user is white
+	lb $t4, circle_piece # user is white
 	jal place_piece
 	j Endif
 	
