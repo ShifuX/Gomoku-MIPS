@@ -64,7 +64,7 @@ returnTwo: # Jump label if user input is invalid
 	move $t8, $a0   # save string to t9
     	syscall
 
-	jal letter_val
+	jal letter_val2
 	
 	li $v0, 4
 	la $a0, nl

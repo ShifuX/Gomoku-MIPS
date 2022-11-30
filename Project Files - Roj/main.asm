@@ -24,6 +24,7 @@ aiTurnBit: .word 0
 winMsg: .asciiz "You win!"
 aiWinMsg: .asciiz "The computer wins..."
 invalidColorMsg: .asciiz "\nInvalid color. Try again.\n"
+invalid_letter_mssg: .asciiz "\n Not a valid column, pick a column displayed on the board \n"
 
 .text
 
@@ -50,6 +51,8 @@ invalidColorMsg: .asciiz "\nInvalid color. Try again.\n"
 .globl userColor
 .globl winBit
 .globl invalidColorMsg
+.globl aiTurnBit
+.globl invalid_letter_mssg
 
 main:
 	addi $t0, $zero, 0
