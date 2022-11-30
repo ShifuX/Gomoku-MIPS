@@ -25,7 +25,7 @@ winMsg: .asciiz "You win!"
 aiWinMsg: .asciiz "The computer wins..."
 invalidColorMsg: .asciiz "\nInvalid color. Try again.\n"
 invalid_letter_mssg: .asciiz "\n Not a valid column, pick a column displayed on the board \n"
-
+invalid_row_msg: .asciiz "\n Not a valid row, pick a row that is valid \n"
 .text
 
 .globl main
@@ -53,7 +53,7 @@ invalid_letter_mssg: .asciiz "\n Not a valid column, pick a column displayed on 
 .globl invalidColorMsg
 .globl aiTurnBit
 .globl invalid_letter_mssg
-
+.globl invalid_row_msg
 main:
 	addi $t0, $zero, 0
 	addi $t1, $zero, 360	# Space of array

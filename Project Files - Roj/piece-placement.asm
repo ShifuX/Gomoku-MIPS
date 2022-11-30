@@ -21,7 +21,8 @@ place_piece:
 	lw $t0, dist
 	lb $t3, board($t0) 
 	
-	bne $t3, '.', invalid # check if space is empty - (check validity of move) FIXME: AI placement occurs twice, causing validity check to branch to invalid.
+	bne $t3, '.', invalidPlacement # check if space is empty - (check validity of move)
+	
 
 	sb $t4, board($t0) # stores star or circle depending on color (stored before place_piece is called)
 	j check_for_win
@@ -34,7 +35,7 @@ clear:
 
 	jr $ra
 	
-invalid: # outputs message if move is illegal
+invalidPlacement: # outputs message if move is illegal
 
 	li $v0, 4 
 	la $a0, invalidMsg
@@ -77,7 +78,7 @@ check_for_win:
 	SLoop:
 		lw $t5, dist #Reset required registers
 		addi $t1, $zero, 1
-	
+		SLoopStart:
 		addi $t1, $t1, 1
 		addi $t5, $t0, 19 #Go up 1 roq
 		bgt $t5, 361, ELoop
@@ -88,11 +89,13 @@ check_for_win:
 
 		beq $t1, $t6, Win # if its looped 4 times
 		
-		j SLoop
+		j SLoopStart
 		
 	ELoop:
 		lw $t5, dist #Reset required registers
 		addi $t1, $zero, 1
+
+		ELoopStart:
 		
 		addi $t1, $t1, 1
 		addi $t5, $t0, 1 #Go right in the row
@@ -102,7 +105,7 @@ check_for_win:
 
 		beq $t1, $t6, Win # if its looped 4 times
 
-		j ELoop
+		j ELoopStart
 		
 	WLoop:
 		lw $t5, dist #Reset required registers
