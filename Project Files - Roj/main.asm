@@ -23,6 +23,7 @@ winBit: .word 0
 aiTurnBit: .word 0
 winMsg: .asciiz "You win!"
 aiWinMsg: .asciiz "The computer wins..."
+invalidColorMsg: .asciiz "\nInvalid color. Try again.\n"
 
 .text
 
@@ -48,6 +49,7 @@ aiWinMsg: .asciiz "The computer wins..."
 .globl colorInputMsg
 .globl userColor
 .globl winBit
+.globl invalidColorMsg
 
 main:
 	addi $t0, $zero, 0
