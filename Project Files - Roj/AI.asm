@@ -4,6 +4,11 @@
 
 ############# AI Code
 generate_col_and_row:
+	addi $t4, $zero, 1
+	sw $t4, aiTurnBit
+	addi $t4, $zero, 0
+	
+	
 	li $v0, 42 #Generate random int
 	li $a1, 19 #Set upper bound
 	syscall
@@ -18,14 +23,15 @@ generate_col_and_row:
 	jr $ra
 	
 place_AI_piece:
-	move $t6, $ra
+	move $s6, $ra
 	lw $a0, AI_row
 	lw $a1, AI_col
 
 	jal calculate_place
 	jal place_piece
-	move $ra, $t6
-	addi $t6, $zero, 0
+	move $ra, $s6
+	addi $s6, $zero, 0
+	sw $zero, aiTurnBit
 	jr $ra
 
 #############

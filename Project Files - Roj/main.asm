@@ -19,6 +19,10 @@ dist: .word 0
 invalidMsg: .asciiz "Illegal Move\n"
 colorInputMsg: .asciiz "Black or White? (Enter B or W): "
 userColor: .space 2
+winBit: .word 0
+aiTurnBit: .word 0
+winMsg: .asciiz "You win!"
+aiWinMsg: .asciiz "The computer wins..."
 
 .text
 
@@ -43,6 +47,7 @@ userColor: .space 2
 .globl invalidMsg
 .globl colorInputMsg
 .globl userColor
+.globl winBit
 
 main:
 	addi $t0, $zero, 0
@@ -52,8 +57,20 @@ main:
 	jal call_display
 	
 	jal color_input # Calls function to get color of user
-	jal user_input	# Calls funciton to get user input
-	jal user_input	# Calls funciton to get user input
 
+
+	main_loop:
+		lw $t0, winBit
+		beq $t0, 1, exit 
+		jal user_input	# Calls funciton to get user input
+	 	j main_loop
+		
+	
+exit:
+	
+	li $v0, 4
+	la $a0, winMsg
+	syscall
+	
 	li $v0, 10
 	syscall
