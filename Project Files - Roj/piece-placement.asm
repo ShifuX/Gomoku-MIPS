@@ -77,9 +77,9 @@ check_for_win:
 	SLoop:
 		lw $t5, dist #Reset required registers
 		addi $t1, $zero, 1
-	
+	SLoopMain:
 		addi $t1, $t1, 1
-		addi $t5, $t0, 19 #Go up 1 roq
+		addi $t5, $t5, 19 #Go up 1 roq
 		bgt $t5, 361, ELoop
 		slt $t2, $t5, $zero
 		beq $t2, 1, SLoop
@@ -88,28 +88,95 @@ check_for_win:
 
 		beq $t1, $t6, Win # if its looped 4 times
 		
-		j SLoop
+		j SLoopMain
 		
 	ELoop:
 		lw $t5, dist #Reset required registers
 		addi $t1, $zero, 1
-		
+	ELoopMain:
 		addi $t1, $t1, 1
-		addi $t5, $t0, 1 #Go right in the row
+		addi $t5, $t5, 1 #Go right in the row
 	
 		lb $t3, board($t5)
 		bne $t3, $t4, WLoop # if current piece != user piece
 
 		beq $t1, $t6, Win # if its looped 4 times
 
-		j ELoop
+		j ELoopMain
 		
 	WLoop:
 		lw $t5, dist #Reset required registers
 		addi $t1, $zero, 1
+	WLoopMain:
+		addi $t1, $t1, 1
+		subi $t5, $t5, 1 #Go left in the row
 	
+		lb $t3, board($t5)
+		bne $t3, $t4, DiagonalUL # if current piece != user piece
+
+		beq $t1, $t6, Win # if its looped 4 times
+
+		j WLoopMain
+	DiagonalUL:
+		lw $t5, dist #Reset required registers
+		addi $t1, $zero, 1
+	DiagonalULMain:
+		addi $t1, $t1, 1
+		subi $t5, $t5, 1 #Go left in the row
+		addi $t5, $t5, 19 #Go up 1 roq
+		
+		lb $t3, board($t5)
+		bne $t3, $t4, DiagonalUR # if current piece != user piece
+
+		beq $t1, $t6, Win # if its looped 4 times
+		
+		j DiagonalULMain
+		
+	DiagonalUR:
+		lw $t5, dist #Reset required registers
+		addi $t1, $zero, 1
+	DiagonalURMain:
+		addi $t1, $t1, 1
+		addi $t5, $t5, 1 #Go right in the row
+		addi $t5, $t5, 19 #Go up 1 row
+		
+		lb $t3, board($t5)
+		bne $t3, $t4, DiagonalDL # if current piece != user piece
+
+		beq $t1, $t6, Win # if its looped 4 times
+		
+		j DiagonalURMain
+		
+	DiagonalDL:
+		lw $t5, dist #Reset required registers
+		addi $t1, $zero, 1
+	DiagonalDLMain:
+		addi $t1, $t1, 1
+		subi $t5, $t5, 1 #Go left in the row
+		subi $t5, $t5, 19 #Go down 1 row
+		
+		lb $t3, board($t5)
+		bne $t3, $t4, DiagonalDR # if current piece != user piece
+
+		beq $t1, $t6, Win # if its looped 4 times
+		
+		j DiagonalDLMain
+		
+	DiagonalDR:
+		lw $t5, dist #Reset required registers
+		addi $t1, $zero, 1
+	DiagonalDRMain:
+		addi $t1, $t1, 1
+		addi $t5, $t5, 1 #Go right in the row
+		subi $t5, $t5, 19 #Go down 1 row
+		
+		lb $t3, board($t5)
+		bne $t3, $t4, Exit # if current piece != user piece
+
+		beq $t1, $t6, Win # if its looped 4 times
+		
+		j DiagonalDRMain
 	
-		j Exit
 	Win:
 		addi $t7, $zero, 1
 		sw $t7, winBit
