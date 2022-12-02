@@ -53,26 +53,6 @@ returnRowOne: # Jump label if row input was invalid
 	#move $ra, $t9
 	j Endif
 
-returnRowTwo: #Jump label if row input was invalid
-
-	li $v0, 4
-	la $a0, test_row
-	syscall
-
-	li $v0, 5
-	syscall
-	sw $v0, row
-	
-	ble $v0, 0, invalidRow
-	bge $v0, 20, invalidRow
-
-	lw $a0, row
-	lw $a1, col
-	
-	jal calculate_place #$a0 is row $a1 is col
-	lb $t4, circle_piece # user is white
-	jal place_piece
-	j Endif
 	
 userSecond: # AI goes first, user goes second if user is white
 
@@ -98,6 +78,26 @@ returnTwo: # Jump label if user input is invalid
 	la $a0, nl
 	syscall
 
+returnRowTwo: #Jump label if row input was invalid
+
+	li $v0, 4
+	la $a0, test_row
+	syscall
+
+	li $v0, 5
+	syscall
+	sw $v0, row
+	
+	ble $v0, 0, invalidRow
+	bge $v0, 20, invalidRow
+
+	lw $a0, row
+	lw $a1, col
+	
+	jal calculate_place #$a0 is row $a1 is col
+	lb $t4, circle_piece # user is white
+	jal place_piece
+	j Endif 
 
 Endif:
 	jal call_display
