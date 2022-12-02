@@ -33,5 +33,7 @@ place_AI_piece:
 	addi $s6, $zero, 0
 	sw $zero, aiTurnBit
 	jr $ra
+	
+	
 
 #############

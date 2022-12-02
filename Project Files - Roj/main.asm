@@ -16,7 +16,7 @@ col: .word 0
 AI_row: .word 0
 AI_col: .word 0
 dist: .word 0
-invalidMsg: .asciiz "Illegal Move\n"
+invalidMsg: .asciiz "Illegal Move. Another piece already occupies that space.\n"
 colorInputMsg: .asciiz "Black or White? (Enter B or W): "
 userColor: .space 2
 winBit: .word 0
