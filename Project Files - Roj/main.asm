@@ -4,7 +4,7 @@ buffer: .space 1
 blank_piece: .ascii "."
 star_piece: .ascii "*"
 circle_piece: .ascii "O"
-board_letters: .asciiz "   A B C D E F G H J K L M N O P Q R S T"
+board_letters: .asciiz "   A B C D E F G H I J K L M N O P Q R S"
 space: .asciiz " "
 nl: .asciiz "\n"
 test_col: .asciiz "Enter Col: "
